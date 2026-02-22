@@ -10,3 +10,18 @@ h3 {
   border-bottom: 1px solid #eaecef;
   padding-bottom: .3em;
 }
+
+body {
+  background-color: #fafafa; /* A gentle off-white for the background */
+  color: #333; /* Dark gray for better readability */
+  line-height: 1.6;
+}
+
+a {
+  color: #007bff; /* A pleasant, modern blue for links */
+  text-decoration: none; /* Remove underlines from links */
+}
+
+a:hover {
+  text-decoration: underline; /* Add underline back on hover for clarity */
+}
