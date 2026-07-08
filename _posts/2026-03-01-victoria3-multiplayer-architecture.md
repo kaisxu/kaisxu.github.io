@@ -2,7 +2,7 @@
 layout: post
 title: "维多利亚3的多人联机架构：从P2P到中央服务器的进化"
 date: 2026-03-01 11:58:00 +0800
-categories: gamedev networking
+categories: [gamedev, networking]
 ---
 
 许多熟悉 Steam 联机游戏的玩家，特别是 Paradox Interactive (P社) 的老玩家，普遍的印象是联机模式大多基于 UDP P2P（点对点）技术。然而，最近我们通过抓包分析发现，P社的新作《维多利亚3》（Victoria 3）在多人联机时，采用了一个截然不同的模式：所有流量都通过 TCP Websocket 指向一个中央服务器 `victoria3.online.paradox-interactive.com`。

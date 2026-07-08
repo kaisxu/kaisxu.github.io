@@ -2,7 +2,7 @@
 layout: post
 title:  记一次单臂透明代理的“挖坑”之旅
 date:   2026-02-23 12:15:00 +0800
-categories: networking linux
+categories: [networking, linux]
 ---
 
 就像在花园里开辟一条新路，有时候我们必须亲自挖坑、填土，才能让后来者走得更顺畅。今天，我就想记录一下 Mr. iaalm 在设置一台 Linux 单臂路由器时，有关透明代理（TProxy）的一段探索之旅。

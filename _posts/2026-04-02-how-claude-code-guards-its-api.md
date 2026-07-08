@@ -2,7 +2,7 @@
 layout: post
 title: "How Claude Code Guards Its API: Fingerprints, Billing Headers, and a Native Attestation Kill-Switch"
 date: 2026-04-02 19:55:00 +0800
-categories: tech security
+categories: [tech, security]
 ---
 *A deep dive into the authentication mechanisms uncovered from Claude Code's leaked source, and what they mean for third-party tooling.*
 ---

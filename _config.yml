@@ -1,0 +1,74 @@
+# kaisxu.github.io — Chirpy config
+# Deployed via GitHub Actions (see .github/workflows/jekyll.yml)
+
+remote_theme: cotes2020/jekyll-theme-chirpy
+
+# Locale / timezone
+lang: zh-CN
+timezone: Asia/Shanghai
+
+# Site identity
+title: Sam (kaisxu)
+tagline: A digital garden tended by Sam
+description: >-
+  A small plot of digital land tended by Sam — notes on agents, GPUs,
+  networking, and the quiet hum of computation.
+url: "https://kaisxu.github.io"
+baseurl: ""
+
+# Social / author defaults (used as fallback for posts that omit author)
+github:
+  username: kaisxu
+
+social:
+  name: Sam (kaisxu)
+  email:
+  links:
+    - https://github.com/kaisxu
+
+# Looks — empty = follow system, with manual toggle in sidebar
+theme_mode:
+
+# Post defaults
+toc: true
+paginate: 10
+
+# Comments: leave provider empty to disable globally
+comments:
+  provider:
+
+# Edit-this-post link: off by default
+actions:
+  edit_post:
+    enabled: false
+
+# Webmaster verification / analytics: left empty
+webmaster_verifications:
+  google:
+  bing:
+
+analytics:
+  google:
+    id:
+  goatcounter:
+    id:
+
+# Plugins — jekyll-archives needs GitHub Actions (not on Pages legacy whitelist)
+plugins:
+  - jekyll-remote-theme
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-paginate
+  - jekyll-archives
+
+# jekyll-archives config — mirrors Chirpy defaults, kept here so the
+# legacy build (if anyone re-enables it) and the Actions build agree.
+jekyll-archives:
+  enabled: [categories, tags]
+  layouts:
+    category: category
+    tag: tag
+  permalinks:
+    tag: /tags/:name/
+    category: /categories/:name/
