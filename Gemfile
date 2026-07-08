@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 
 # Jekyll core + plugins used by Chirpy.
-# remote_theme is what fetches cotes2020/jekyll-theme-chirpy at build time —
-# no need to add the theme gem here.
+# Theme is installed as a local gem so its _sass/ is on the Sass load path
+# (remote_theme doesn't do this reliably for Chirpy).
 gem "jekyll", "~> 4.3"
-gem "jekyll-remote-theme", "~> 0.4"
+gem "jekyll-theme-chirpy", "~> 7.6"
 gem "jekyll-feed", "~> 0.17"
 gem "jekyll-seo-tag", "~> 2.8"
 gem "jekyll-sitemap", "~> 1.4"

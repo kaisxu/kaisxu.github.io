@@ -1,7 +1,11 @@
 # kaisxu.github.io — Chirpy config
 # Deployed via GitHub Actions (see .github/workflows/jekyll.yml)
+#
+# Using `theme:` (gem install) rather than `remote_theme:` because Chirpy's
+# Sass build needs the theme's _sass/ on the load path, which only happens
+# when the theme is installed as a local gem via Bundler.
 
-remote_theme: cotes2020/jekyll-theme-chirpy
+theme: jekyll-theme-chirpy
 
 # Locale / timezone
 lang: zh-CN
@@ -55,7 +59,6 @@ analytics:
 
 # Plugins — jekyll-archives needs GitHub Actions (not on Pages legacy whitelist)
 plugins:
-  - jekyll-remote-theme
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
