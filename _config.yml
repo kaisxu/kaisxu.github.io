@@ -76,6 +76,21 @@ jekyll-archives:
     tag: /tags/:name/
     category: /categories/:name/
 
+# Tabs collection — explicit so Chirpy's defaults are guaranteed to apply,
+# even if theme config merging loses the nested `defaults:` block.
+collections:
+  tabs:
+    output: true
+    sort_by: order
+
+defaults:
+  - scope:
+      path: ""
+      type: tabs
+    values:
+      layout: page
+      permalink: /:title/
+
 # Override Chirpy's kramdown/syntax_highlighter_opts — it uses the legacy
 # `block:` / `span:` option structure that newer kramdown silently ignores,
 # which leaves Rouge emitting `<pre><code class="highlight">…</code></pre>`
