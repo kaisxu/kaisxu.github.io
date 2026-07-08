@@ -4,7 +4,7 @@ title: "运行 CUDA 内核时发生了什么"
 date: 2026-07-07 21:00:00 +0800
 categories: tech gpu
 ---
-> *本文翻译并转载自 [Fergus Finn 的博客](https://fergusfinn.com/blog/what-happens-when-you-run-a-gpu-kernel/)，原文标题："What Happens When You Run a CUDA Kernel"，发表于 2026 年 6 月 29 日。封面：Salomon de Caus 的「钉柱式水风琴」，出自其 1615 年出版的《[Les Raisons des Forces Mouvantes](https://commons.wikimedia.org/wiki/File:Les_raisons_des_forces_mouuantes_auec_diuerses_machines_tant_vtilles_que_plaisantes_aus_quelles_sont_adioints_plusieurs_desseings_de_grotes_et_fontaines_%281615%29_%2814740673966%29.jpg)》。译文已获得原作者授权转载，转载请保留原文链接与作者署名。*
+> *本文为**非商业学习用途**的中文翻译，原文来自 [Fergus Finn 的博客](https://fergusfinn.com/blog/what-happens-when-you-run-a-gpu-kernel/)，原文标题："What Happens When You Run a CUDA Kernel"，原文发表于 2026 年 6 月 29 日（最后修改于 2026 年 7 月 2 日）。封面：Salomon de Caus 的「钉柱式水风琴」，出自其 1615 年出版的《[Les Raisons des Forces Mouvantes](https://commons.wikimedia.org/wiki/File:Les_raisons_des_forces_mouuantes_auec_diuerses_machines_tant_vtilles_que_plaisantes_aus_quelles_sont_adioints_plusieurs_desseings_de_grotes_et_fontaines_%281615%29_%2814740673966%29.jpg)）。**译者未与原作者取得联系，原站点未声明任何转载或翻译许可。**译者为尊重原作者权益，已在文末详细标注原文出处与作者信息。如需再行转载，请联系原作者或译者。*
 
 ---
 
@@ -592,4 +592,5 @@ static void __sti____cudaRegisterAll(void) {
 > - 原文链接：<https://fergusfinn.com/blog/what-happens-when-you-run-a-gpu-kernel/>
 > - 原文发布时间：2026 年 6 月 29 日；最后修改 2026 年 7 月 2 日
 > - 原文另址：[Doubleword 博客](https://blog.doubleword.ai/what-happens-when-you-run-a-cuda-kernel)
-> - 译者注：本文为翻译转载，仅作学习交流之用。译文保留原文的全部代码片段（含 CUDA、PTX、SASS、NCU 输出、C 钩子）、ASCII 图表、表格与脚注；非英文引文（封面出处、题图、参考链接等）一并保留原文 URL 以便读者回溯。原文个别 SASS 控制字表头被 GitHub Markdown 渲染错误地写成 `t0e`、`teReuseFlags` 等乱码（位于 [「一个有资格的 warp」](#一个-warp-的有资格是什么意思) 一节），译文按文档惯例恢复为 `reuse / wait mask / read / write / Y / stall`。代码注释与变量名均保留英文以方便与原文对照。如有错漏，欢迎指正。
+> - **授权状态**：原站点及其全文未声明任何明示的转载或翻译许可。译者未与原作者取得联系，也未获得任何形式的授权。本文按"未经授权、仅作非商业学习交流用途"处理。如需将译文再行转载、出版或用于其他用途，请**先联系原作者 Fergus Finn**（联系方式见原文页脚及[其个人主页](https://www.doubleword.ai/about-doubleword)）取得明确许可。
+> - 译注：本文为非商业学习用途的中文翻译。译文保留原文的全部代码片段（含 CUDA、PTX、SASS、NCU 输出、C 钩子）、ASCII 图表、表格与脚注；非英文引文（封面出处、题图、参考链接等）一并保留原文 URL 以便读者回溯。原文个别 SASS 控制字表头被 GitHub Markdown 渲染错误地写成 `t0e`、`teReuseFlags` 等乱码（位于 [「一个有资格的 warp」](#一个-warp-的有资格是什么意思) 一节），译文按文档惯例恢复为 `reuse / wait mask / read / write / Y / stall`。代码注释与变量名均保留英文以方便与原文对照。如有错漏，欢迎指正。
