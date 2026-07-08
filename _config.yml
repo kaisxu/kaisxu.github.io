@@ -75,3 +75,16 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
+
+# Override Chirpy's kramdown/syntax_highlighter_opts — it uses the legacy
+# `block:` / `span:` option structure that newer kramdown silently ignores,
+# which leaves Rouge's wrap/line_numbers at the wrong defaults and produces
+# `<div class="highlight"><code>…</code></div>` (no <pre>, no line numbers),
+# so the browser collapses whitespace and code shows as one long line.
+kramdown:
+  footnote_backlink: "&#8617;&#xfe0e;"
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    wrap: true
+    line_numbers: false
