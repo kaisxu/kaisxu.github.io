@@ -33,13 +33,6 @@ social:
 # Looks — empty = follow system, with manual toggle in sidebar
 theme_mode:
 
-# License — shown at the bottom of every post by default. The translation
-# post (2026-07-07 CUDA) overrides this with `license: false` since the
-# original work isn't ours to license.
-license:
-  name: CC BY-SA 4.0
-  url: https://creativecommons.org/licenses/by-sa/4.0/
-
 # Post defaults
 toc: true
 paginate: 10

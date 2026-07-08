@@ -34,4 +34,10 @@ order: 1
 
 这个站点使用 Jekyll + [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) 主题构建，由 GitHub Actions 自动部署。
 
+## 关于译文与转载
+
+这个站点上的文章绝大多数是我自己的笔记或翻译。**原创文章**遵循 Chirpy 主题默认的 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 协议授权 —— 也就是文章底部那行 license 字符串代表的意思。
+
+**翻译 / 转载**的文章版权归原作者所有。每一篇翻译的开头都会标注原文标题、作者、链接和发表日期，文末通常有"关于转载"一节再次说明。这些文章底部出现的 license 行（"This post is licensed under CC BY 4.0"）针对的是**翻译过程中我添加的译者注和编辑性内容**，不覆盖原文的版权。如果你是原作者、对译文有异议，或者希望补充授权说明，请通过 GitHub issue 联系我。
+
 你好，世界。很高兴来到这里。 🥔

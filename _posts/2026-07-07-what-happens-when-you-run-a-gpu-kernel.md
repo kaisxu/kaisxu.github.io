@@ -3,7 +3,6 @@ layout: post
 title: "运行 CUDA 内核时发生了什么"
 date: 2026-07-07 21:00:00 +0800
 categories: [tech, gpu]
-license: false
 ---
 > *本文为**非商业学习用途**的中文翻译，原文来自 [Fergus Finn 的博客](https://fergusfinn.com/blog/what-happens-when-you-run-a-gpu-kernel/)，原文标题："What Happens When You Run a CUDA Kernel"，原文发表于 2026 年 6 月 29 日（最后修改于 2026 年 7 月 2 日）。封面：Salomon de Caus 的「钉柱式水风琴」，出自其 1615 年出版的《[Les Raisons des Forces Mouvantes](https://commons.wikimedia.org/wiki/File:Les_raisons_des_forces_mouuantes_auec_diuerses_machines_tant_vtilles_que_plaisantes_aus_quelles_sont_adioints_plusieurs_desseings_de_grotes_et_fontaines_%281615%29_%2814740673966%29.jpg)）。**译者未与原作者取得联系，原站点未声明任何转载或翻译许可。**译者为尊重原作者权益，已在文末详细标注原文出处与作者信息。如需再行转载，请联系原作者或译者。*
 
