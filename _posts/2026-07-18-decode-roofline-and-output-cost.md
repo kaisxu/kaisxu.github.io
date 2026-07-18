@@ -59,17 +59,28 @@ Roofline 把"一个算子在这块卡上能跑多快"这件事收成两条线：
 
 把当前一代旗舰的拐点列一下，能立刻看出问题：
 
-| 卡 | HBM 带宽 | FP16 峰值 (TFLOPs) | FP16 ridge | FP8 峰值 | FP8 ridge |
-|---|---:|---:|---:|---:|---:|
-| A100 SXM | 2.0 TB/s | 312 | 156 | — | — |
-| H100 SXM | 3.35 TB/s | 1979 | **590** | 3958 | 1180 |
-| H200 SXM | 4.8 TB/s | 1979 | 412 | 3958 | 825 |
-| B200 SXM | 8.0 TB/s | 2250 | 281 | 4500 | 562 |
-| GB200 (NVL72 per package 估) | ~8 TB/s | 2500 | 312 | 5000 | 625 |
+| 卡 | HBM 带宽 | FP16 峰值 (TFLOPs) | FP16 ridge | FP8 峰值 | FP8 ridge | decode 利用率 (B=128) |
+|---|---:|---:|---:|---:|---:|---:|
+| A100 SXM | 2.0 TB/s | 312 | 156 | — | — | **40%** |
+| H100 SXM | 3.35 TB/s | 1979 | **590** | 3958 | 1180 | **10.5%** |
+| H200 SXM | 4.8 TB/s | 1979 | 412 | 3958 | 825 | **15%** |
+| B200 SXM | 8.0 TB/s | 2250 | 281 | 4500 | 562 | **22%** |
+| GB200 (NVL72 per package 估) | ~8 TB/s | 2500 | 312 | 5000 | 625 | **20%** |
 
 观察：H200 把带宽加了 43%，但 FP16 ridge *反而下降*（从 590 到 412），因为峰值算力没变。Blackwell 把带宽推到 8 TB/s，ridge 进一步降到 ~280。换句话说，**新一代硬件把带宽缺口按比例扩大了"算力墙-带宽墙"之间的剪刀差**——这对 decode 不利，对 prefill 影响有限。
 
 这就是为什么不能拿"FP4 峰值"评价 LLM decode 的利用率：FP4 tensor core 在 decode 中几乎用不到（KV cache 还得是 FP16/FP8，attention 主路径不会跑到 FP4），能匹配上的只有权重 GEMM。引用：NVIDIA H100 / H200 / Blackwell architecture briefs ([H100](https://www.nvidia.com/en-us/data-center/h100/), [H200](https://www.nvidia.com/en-us/data-center/h200/), [Blackwell brief](https://developer.nvidia.com/blog/nvidia-blackwell-gpu-technical-brief/))。
+
+### §二 takeaway：对 decode 工作点，FP16 峰值就够用
+
+把上面这张 ridge 表和 §一那张聚合 AI 表叠在一起读，能看出来一件事，但需要写明白：
+
+- LLaMA-70B（GQA g=8、FP16 KV）在 B=128 下 AI_agg ≈ 62 FLOP/byte——只是 H100 ridge (590) 的 10.5%，B=1 时只剩 0.18%。
+- "FP16 峰值 1979 vs 2250 TFLOPs"、"FP8 峰值 3958 vs 4500 TFLOPs" 这类数字——对 decode 来说几乎只是营销数字；新版峰值更高，反而把 ridge 推得更低，**纸面上看利用率涨了，实际上 decode 工作点没变**（这就是新增那列 `decode 利用率` 想钉的事）。
+- Blackwell 引入的 FP4 tensor core 在 decode 中几乎用不上：KV cache 还得是 FP16/FP8，attention 主路径不会跑到 FP4，能匹配上的只有权重 GEMM。
+- 真正决定 decode 单 token 单价的，是 **HBM 带宽 × batch 摊薄 × 量化精度的组合**——和"几 eFLOPS 的 FP4 峰值"基本无关。
+
+下一节我们从第一性原理推导这个聚合 AI 是怎么算出来的。
 
 ---
 
