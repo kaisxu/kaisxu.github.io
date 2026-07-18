@@ -91,22 +91,30 @@ defaults:
       layout: page
       permalink: /:title/
 
-# Override Chirpy's kramdown/syntax_highlighter_opts — it uses the legacy
-# `block:` / `span:` option structure that newer kramdown silently ignores,
-# which leaves Rouge emitting `<pre><code class="highlight">…</code></pre>`
-# with no surrounding `<pre>` for the code to preserve newlines in. Result:
-# jekyll-compress-html sees the spans as inter-tag whitespace and clips them,
-# and the browser collapses the rest, so every code block renders as one
-# long line.
+# Override Chirpy's kramdown/syntax_highlighter_opts — newer kramdown accepts
+# the legacy `block:` / `span:` sub-keys (older Chirpy was wrong about that);
+# we use them so block-only options (line_numbers, gutter) don't leak into
+# inline code spans.
 #
-# Enable line_numbers so Rouge wraps the output in a `<table>` (the structure
-# Chirpy's CSS expects), and that table contains a `<pre>` that preserves
-# newlines.
+# Rationale for the block-side options:
+#   * `line_numbers: true` makes Rouge wrap block output in `<table>` (the
+#     structure Chirpy's CSS expects); without it Rouge emits
+#     `<pre><code class="highlight">…</code></pre>` with no surrounding
+#     `<pre>`, which causes jekyll-compress-html to treat the spans as inter-
+#     tag whitespace and clip them — every code block renders as one line.
+#   * `start_line: 1` / `bold_every: 8` are the standard gutter formatting.
+#
+# `:span:` is intentionally minimal so inline backticks like `` `%rd1` ``
+# bypass Rouge entirely (no `language-x highlighter-y` classes, no table-
+# with-line-numbers wrapper around a one-line code value, no invalid
+# `<div>`-inside-`<p>` HTML). That keeps identifiers in prose rendering as
+# ordinary `<code>` chips.
 kramdown:
   footnote_backlink: "&#8617;&#xfe0e;"
   syntax_highlighter: rouge
   syntax_highlighter_opts:
     css_class: highlight
-    line_numbers: true
-    start_line: 1
-    bold_every: 8
+    block:
+      line_numbers: true
+      start_line: 1
+      bold_every: 8
