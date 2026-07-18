@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "从 output token 到 roofline：一份对 GPU 推理架构的再审视"
-date: 2026-07-18 18:00:00 +0800
+date: 2026-07-18 09:00:00 +0800
 categories: [tech, gpu, inference]
 ---
 
