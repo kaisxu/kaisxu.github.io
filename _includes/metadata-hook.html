@@ -1,0 +1,11 @@
+{%- comment -%}
+  Local override of Chirpy's `metadata-hook.html`. The upstream file
+  contains a single comment placeholder; this version appends MathJax
+  for any page that opts in via `math: true` in front matter.
+
+  Reference: https://docs.mathjax.org/en/latest/web/configuration.html
+{%- endcomment -%}
+<!-- A placeholder to allow defining custom metadata -->
+{%- if page.math -%}
+  {%- include mathjax.html -%}
+{%- endif -%}

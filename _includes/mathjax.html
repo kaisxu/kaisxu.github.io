@@ -1,0 +1,26 @@
+{%- comment -%}
+  MathJax 3 loader. Renders display math via `$$ … $$` (kramdown's output
+  for our $$ … $$ source blocks) and `\[ … \]`, and inline math via
+  `\( … \)`. We skip pre/code/textarea so it never tries to re-typeset
+  fenced code blocks.
+
+  Reference: https://docs.mathjax.org/en/latest/web/configuration.html
+{%- endcomment -%}
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
