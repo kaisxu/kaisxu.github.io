@@ -58,6 +58,26 @@ Fix blog post date to be in the past
 
 Avoid prefixes like `feat:` / `chore:` — the repo's history does not use them.
 
+### Math
+
+- Kramdown's mathjax engine only recognizes `$$ … $$` (display on its own
+  block, inline on the same line). It does **not** recognize `\( … \)`,
+  `\[ … \]`, or `$ … $` — those come through as literal text/escapes.
+- For MathJax, set `math: true` in the post front matter. Chirpy's
+  `js-selector.html` then auto-injects the MathJax config + runtime.
+  Do **not** add a custom MathJax loader, and do **not** set
+  `kramdown.math_engine: mathjax` (it's already the default; being
+  explicit invites future readers to think it changes parsing).
+
+### Code blocks
+
+`kramdown.syntax_highlighter_opts` applies to both block (fenced) **and**
+span (inline backticks). Top-level `line_numbers: true` makes Rouge wrap
+every inline `` `foo` `` in a Rouge `<table>` inside `<code>` inside
+`<p>` — invalid HTML, and the chip grows into a giant gray box on the
+page. Keep block-only options under `:block:`, leave the top level (or
+`:span:`) bare. See existing `_config.yml` for the working form.
+
 ## Publishing & monitoring
 
 After committing and pushing to `main`, `.github/workflows/jekyll.yml` kicks off a build + deploy.
