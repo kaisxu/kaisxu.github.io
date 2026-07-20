@@ -36,8 +36,8 @@
   <text x="32" y="280" text-anchor="middle" font-size="13" fill="#222" transform="rotate(-90 32 280)">可达吞吐 (TFLOPs)</text>
 
   <!-- Region labels: bandwidth-bound (left) vs compute-bound (right) -->
-  <text x="280" y="480" font-size="12" fill="#888" font-style="italic">← 带宽受限 →</text>
-  <text x="600" y="60"  font-size="12" fill="#888" font-style="italic">算力受限 ←</text>
+  <text x="280" y="480" font-size="12" fill="#888" font-style="italic">← 带宽受限</text>
+  <text x="700" y="60"  font-size="12" fill="#888" font-style="italic">→ 算力受限</text>
 
   <!-- H100 BW line: y = 3.35·AI TFLOPs, (1, 3.35) to (590, 1979) -->
   <line x1="162.2" y1="407.7" x2="617.4" y2="158.3" stroke="#1f77b4" stroke-width="2"/>
@@ -83,13 +83,13 @@
   <circle cx="456.6" cy="246.5" r="5" fill="#d62728"/>
   <text x="468" y="244" font-size="11" fill="#d62728">B=128 (AI=62)</text>
 
-  <!-- Prefill work point (FP16 B=1 S=4096, AI_agg ≈ 4200, 远超 ridge → sits on FP16 wall) -->
-  <circle cx="757.4" cy="81.6" r="6" fill="#9467bd"/>
-  <text x="650" y="76" font-size="11" fill="#9467bd">prefill B=1, S=4096 (AI≈4200)</text>
+  <!-- Prefill work point: sits ON the FP16 ceiling (clipped by compute wall) -->
+  <circle cx="757.2" cy="158.3" r="6" fill="#9467bd"/>
+  <text x="650" y="128" font-size="11" fill="#9467bd">prefill B=1, S=4096 (AI≈4200, 贴在算力墙)</text>
 
   <!-- Caption annotations -->
   <text x="320" y="445" font-size="12" fill="#444" font-style="italic">decode 永远卡在斜线段（带宽墙）</text>
-  <text x="630" y="118" font-size="12" fill="#444" font-style="italic">prefill 早就坐上算力墙</text>
+  <text x="630" y="148" font-size="12" fill="#444" font-style="italic">prefill 早就坐上算力墙</text>
 
   <!-- Legend -->
   <g transform="translate(620, 90)" font-size="11" fill="#222">
