@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
   <!-- Background -->
   <rect width="900" height="600" fill="#ffffff"/>
 
   <!-- Title -->
   <text x="450" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#222">LLaMA-70B decode 工作点 vs roofline（H100 / H200 / B200）</text>
-  <text x="450" y="48" text-anchor="middle" font-size="11" fill="#666">FP16 权重 + FP16 KV，g=8，T=4096；横轴 = 算术强度 AI (FLOP/byte)，纵轴 = 可达吞吐 (TFLOPs)，均为对数</text>
+  <text x="450" y="48" text-anchor="middle" font-size="11" fill="#666">FP16 dense 口径 + FP16 KV，g=8，T=4096；横轴 = 算术强度 AI (FLOP/byte)，纵轴 = 可达吞吐 (TFLOPs)，均为对数</text>
 
   <!-- Axes -->
   <line x1="80" y1="500" x2="820" y2="500" stroke="#222" stroke-width="1"/>
@@ -39,36 +39,31 @@
   <text x="280" y="480" font-size="12" fill="#888" font-style="italic">← 带宽受限</text>
   <text x="700" y="60"  font-size="12" fill="#888" font-style="italic">→ 算力受限</text>
 
-  <!-- H100 BW line: y = 3.35·AI TFLOPs, (1, 3.35) to (590, 1979) -->
-  <line x1="162.2" y1="407.7" x2="617.4" y2="158.3" stroke="#1f77b4" stroke-width="2"/>
-  <!-- H200 BW line: y = 4.8·AI, (1, 4.8) to (412, 1979) -->
-  <line x1="162.2" y1="393.6" x2="591.5" y2="158.3" stroke="#ff7f0e" stroke-width="2"/>
-  <!-- B200 BW line: y = 8·AI, (1, 8) to (281, 2250) -->
+  <!-- H100 BW line: y = 3.35·AI TFLOPs, (1, 3.35) to (295, 989) dense ridge -->
+  <line x1="162.2" y1="407.7" x2="567.9" y2="185.4" stroke="#1f77b4" stroke-width="2"/>
+  <!-- H200 BW line: y = 4.8·AI, (1, 4.8) to (206, 989) dense ridge -->
+  <line x1="162.2" y1="393.6" x2="542.7" y2="185.4" stroke="#ff7f0e" stroke-width="2"/>
+  <!-- B200 BW line: y = 8·AI, (1, 8) to (281, 2250) dense ridge -->
   <line x1="162.2" y1="373.7" x2="564.8" y2="153.3" stroke="#2ca02c" stroke-width="2"/>
 
-  <!-- FP16 peak horizontal (1979 TFLOPs for H100/H200) -->
-  <line x1="80" y1="158.3" x2="820" y2="158.3" stroke="#888" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <!-- B200 FP16 peak (2250 TFLOPs) -->
+  <!-- FP16 dense peak horizontal (989 TFLOPs for H100/H200) -->
+  <line x1="80" y1="185.4" x2="820" y2="185.4" stroke="#888" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <!-- B200 FP16 dense peak (2250 TFLOPs) -->
   <line x1="80" y1="153.3" x2="820" y2="153.3" stroke="#aaa" stroke-width="1" stroke-dasharray="3,3"/>
 
-  <!-- Ridge vertical guides -->
-  <line x1="617.4" y1="158.3" x2="617.4" y2="500" stroke="#1f77b4" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
-  <line x1="591.5" y1="158.3" x2="591.5" y2="500" stroke="#ff7f0e" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+  <!-- Ridge vertical guides (dense 一致口径) -->
+  <line x1="567.9" y1="185.4" x2="567.9" y2="500" stroke="#1f77b4" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+  <line x1="542.7" y1="185.4" x2="542.7" y2="500" stroke="#ff7f0e" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
   <line x1="564.8" y1="153.3" x2="564.8" y2="500" stroke="#2ca02c" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
 
   <!-- Line labels at right edge -->
-  <text x="623" y="148" font-size="11" fill="#1f77b4">H100 (3.35 TB/s)</text>
-  <text x="597" y="143" font-size="11" fill="#ff7f0e">H200 (4.8 TB/s)</text>
-  <text x="571" y="138" font-size="11" fill="#2ca02c">B200 (8 TB/s)</text>
+  <text x="623" y="178" font-size="11" fill="#1f77b4">H100 (3.35 TB/s)</text>
+  <text x="597" y="170" font-size="11" fill="#ff7f0e">H200 (4.8 TB/s)</text>
+  <text x="571" y="148" font-size="11" fill="#2ca02c">B200 (8 TB/s)</text>
 
-  <!-- FP16 peak label -->
-  <text x="816" y="153" text-anchor="end" font-size="10" fill="#888">H100/H200 FP16 peak (1979 TFLOPs)</text>
-  <text x="816" y="148" text-anchor="end" font-size="10" fill="#aaa">B200 FP16 peak (2250)</text>
-
-  <!-- Ridge labels at bottom -->
-  <text x="617" y="498" text-anchor="middle" font-size="10" fill="#1f77b4" opacity="0.75">ridge=590</text>
-  <text x="591" y="498" text-anchor="middle" font-size="10" fill="#ff7f0e" opacity="0.75">ridge=412</text>
-  <text x="565" y="498" text-anchor="middle" font-size="10" fill="#2ca02c" opacity="0.75">ridge=281</text>
+  <!-- FP16 dense peak labels -->
+  <text x="816" y="181" text-anchor="end" font-size="10" fill="#888">H100/H200 FP16 dense peak (989 TFLOPs)</text>
+  <text x="816" y="148" text-anchor="end" font-size="10" fill="#aaa">B200 FP16 dense peak (2250)</text>
 
   <!-- Decode work points (LLaMA-70B, FP16, g=8, T=4096) -->
   <circle cx="167.0" cy="405.2" r="5" fill="#d62728"/>
@@ -83,26 +78,29 @@
   <circle cx="456.6" cy="246.5" r="5" fill="#d62728"/>
   <text x="468" y="244" font-size="11" fill="#d62728">B=128 (AI=62)</text>
 
-  <!-- Prefill work point: sits ON the FP16 ceiling (clipped by compute wall) -->
-  <circle cx="757.2" cy="158.3" r="6" fill="#9467bd"/>
-  <text x="650" y="128" font-size="11" fill="#9467bd">prefill B=1, S=4096 (AI≈4200, 贴在算力墙)</text>
+  <!-- Prefill work point: clipped to FP16 dense ceiling (989 TFLOPs on H100/H200 line) -->
+  <circle cx="757.2" cy="185.4" r="6" fill="#9467bd"/>
+  <text x="650" y="125" font-size="11" fill="#9467bd">prefill B=1, S=4096 (AI≈4200, 贴在 dense 算力墙)</text>
 
   <!-- Caption annotations -->
   <text x="320" y="445" font-size="12" fill="#444" font-style="italic">decode 永远卡在斜线段（带宽墙）</text>
-  <text x="630" y="148" font-size="12" fill="#444" font-style="italic">prefill 早就坐上算力墙</text>
+  <text x="630" y="138" font-size="12" fill="#444" font-style="italic">prefill 早就坐上算力墙</text>
 
-  <!-- Legend -->
-  <g transform="translate(620, 90)" font-size="11" fill="#222">
-    <rect x="0" y="-10" width="180" height="80" fill="#fafafa" stroke="#ddd"/>
-    <line x1="8" y1="0" x2="28" y2="0" stroke="#1f77b4" stroke-width="2"/>
-    <text x="34" y="4">H100 BW line</text>
-    <line x1="8" y1="16" x2="28" y2="16" stroke="#ff7f0e" stroke-width="2"/>
-    <text x="34" y="20">H200 BW line</text>
-    <line x1="8" y1="32" x2="28" y2="32" stroke="#2ca02c" stroke-width="2"/>
-    <text x="34" y="36">B200 BW line</text>
-    <circle cx="18" cy="50" r="5" fill="#d62728"/>
-    <text x="34" y="54">Decode 工作点 (B=1/8/32/128)</text>
-    <circle cx="18" cy="64" r="5" fill="#9467bd"/>
-    <text x="34" y="68">Prefill 工作点 (S=4096)</text>
+  <!-- Legend (with ridge values consolidated to avoid overlap at bottom) -->
+  <g transform="translate(80, 65)" font-size="11" fill="#222">
+    <rect x="0" y="-12" width="280" height="120" fill="#fafafa" stroke="#ddd"/>
+    <text x="8" y="2" font-size="11" font-weight="bold">图例</text>
+    <line x1="8" y1="18" x2="28" y2="18" stroke="#1f77b4" stroke-width="2"/>
+    <text x="34" y="22">H100 BW line · ridge=295 (dense)</text>
+    <line x1="8" y1="34" x2="28" y2="34" stroke="#ff7f0e" stroke-width="2"/>
+    <text x="34" y="38">H200 BW line · ridge=206 (dense)</text>
+    <line x1="8" y1="50" x2="28" y2="50" stroke="#2ca02c" stroke-width="2"/>
+    <text x="34" y="54">B200 BW line · ridge=281 (dense)</text>
+    <line x1="8" y1="66" x2="28" y2="66" stroke="#888" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <text x="34" y="70">FP16 dense peak (H100/H200 = 989)</text>
+    <circle cx="18" cy="82" r="5" fill="#d62728"/>
+    <text x="34" y="86">Decode 工作点 (B=1/8/32/128)</text>
+    <circle cx="18" cy="98" r="6" fill="#9467bd"/>
+    <text x="34" y="102">Prefill 工作点 (S=4096, 贴在算力墙)</text>
   </g>
 </svg>

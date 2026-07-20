@@ -38,7 +38,7 @@ $$\mathrm{AI} \;=\; \frac{\text{一次推理做的浮点运算}}{\text{一次推
 
 B=128 都还没到 H100 ridge (dense) 的 21%。这就是 output token 工作的真实 "地形"：**永远坐在 roofline 的带宽侧**。
 
-![Decode 与 prefill 工作点在 roofline 上的位置（H100/H200/B200 三条 BW 斜线 + FP16 算力墙）](/assets/img/decode-roofline.svg)
+![Decode 与 prefill 工作点在 roofline 上的位置（H100/H200/B200 三条 BW 斜线 + FP16 dense 算力墙）](/assets/img/decode-roofline.svg){: width="900" height="600"}
 
 注意表格里有两个完全不同的量：线性层 AI 是 $$2B/\sigma_w$$（按 batch 摊权重），attention 算术强度是 $$2g/\sigma_{kv} = 8$$（与 batch 无关、与上下文长度无关——**与 batch 无关**才是它卡带宽的根因：让 attention 摆脱带宽只能改 $$g$$ 和 $$\sigma_{kv}$$，即 GQA / FP8 KV，详见 §3.3）。前者解释了 batching 的红利，后者解释了为什么 batching 不能无限提升。第三节会从公式推导。
 
