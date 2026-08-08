@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "把 Llama 烧进硅片：拆解 Taalas HC1 的硬连线推理"
-date: 2026-08-09 10:00:00 +0800
+date: 2026-08-08 23:00:00 +0800
 categories: [tech, ai-chip, inference]
 math: true
 ---
