@@ -78,6 +78,27 @@ every inline `` `foo` `` in a Rouge `<table>` inside `<code>` inside
 page. Keep block-only options under `:block:`, leave the top level (or
 `:span:`) bare. See existing `_config.yml` for the working form.
 
+### Diagrams
+
+Fenced `` ```mermaid `` blocks only render if the post's front matter sets
+`mermaid: true` — Chirpy's `js-selector.html` gates the runtime on it.
+Without the flag the block silently renders as a plain code listing.
+
+### Chirpy prompt boxes
+
+A callout is a **single-level** blockquote followed by the class:
+
+```markdown
+> Text here.
+{: .prompt-tip }
+```
+
+Valid classes: `prompt-info`, `prompt-tip`, `prompt-warning`,
+`prompt-danger`. Writing `> >` nests a second blockquote — the class
+lands on the outer one, so the box renders empty with an ordinary quote
+inside it. Multi-paragraph callouts use repeated single `>` lines, not
+nesting.
+
 ## Publishing & monitoring
 
 After committing and pushing to `main`, `.github/workflows/jekyll.yml` kicks off a build + deploy.
@@ -105,7 +126,28 @@ gh api repos/kaisxu/kaisxu.github.io/pages/builds/latest \
   --jq '{status, commit:.commit.sha[0:7]}'
 ```
 
-A successful Actions run is typically `success` in 1–3 minutes (it has to install Ruby gems from scratch each time). Posts live at `https://kaisxu.github.io/posts/<slug>/` (Chirpy permalink). Always fetch the rendered URL — the workflow succeeding does not guarantee the post is publicly visible.
+A successful Actions run is typically `success` in 1–3 minutes (it has to install Ruby gems from scratch each time).
+
+### Post URLs
+
+`_config.yml` sets no `permalink`, so posts use **Jekyll's default**, not Chirpy's `/posts/:title/`:
+
+```
+https://kaisxu.github.io/<category>/<subcategory>/YYYY/MM/DD/<slug>.html
+```
+
+e.g. `categories: [tech, reverse-engineering]` + `2026-08-30-itoo-sc808-…` →
+`https://kaisxu.github.io/tech/reverse-engineering/2026/08/30/itoo-sc808-orphaned-smart-home-hub.html`
+
+`/posts/<slug>/` returns 404. Don't "fix" this by adding `permalink: /posts/:title/` without asking — it would break every existing post's URL.
+
+Easiest way to get the real URL after a deploy:
+
+```bash
+curl -s https://kaisxu.github.io/sitemap.xml | grep -o '<loc>[^<]*</loc>'
+```
+
+Always fetch the rendered URL — the workflow succeeding does not guarantee the post is publicly visible. In particular, a **future-dated post builds green but 404s**, because Jekyll drops it (no `future: true` in `_config.yml`). Check `date` against the current clock, not just the filename.
 
 ## Translations & reposts (转载)
 
