@@ -34,6 +34,13 @@ order: 2
 {% endfor %}
 {% assign all_tags = all_tags | uniq | sort_natural %}
 
+<p class="text-muted small mb-3">
+  <i class="fas fa-bookmark fa-fw me-1"></i>
+  想收藏？用
+  <a href="{{ '/brief/latest/' | relative_url }}"><code>/brief/latest/</code></a>
+  —— 这个地址永远指向最新一期。
+</p>
+
 <div id="brief-filter" class="d-flex flex-wrap align-items-center mb-4">
   <a class="post-tag btn btn-outline-primary active" href="#" data-tag="">
     全部 <span class="text-muted">{{ briefs.size }}</span>

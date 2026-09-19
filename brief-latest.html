@@ -1,0 +1,50 @@
+---
+permalink: /brief/latest/
+sitemap: false
+---
+
+{%- comment -%}
+  Stable bookmark target: /brief/latest/ always lands on the newest brief.
+
+  Lives at the repo root rather than in _brief/ on purpose — a file inside
+  the collection would become an entry itself and show up in the index and
+  the tag filter.
+
+  GitHub Pages serves static files only, so there is no server-side 301.
+  The redirect is resolved at build time (every new brief triggers a
+  rebuild, which rewrites the target here) and executed client-side:
+
+    * `location.replace` runs first and keeps the redirect out of the back
+      button, so Back returns to wherever the reader came from rather than
+      bouncing them forward again.
+    * `<meta http-equiv="refresh">` covers JS-disabled browsers.
+    * the visible link covers both failing.
+
+  `sitemap: false` keeps this bouncer out of sitemap.xml, and the canonical
+  link points crawlers at the real entry.
+
+  No `layout:` key, so Jekyll renders this file as-is.
+{%- endcomment -%}
+
+{%- assign latest_brief = site.brief | sort: 'date' | last -%}
+{%- if latest_brief -%}
+  {%- assign target = latest_brief.url | relative_url -%}
+{%- else -%}
+  {%- assign target = '/brief/' | relative_url -%}
+{%- endif -%}
+<!doctype html>
+<html lang="{{ site.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url={{ target }}">
+    <link rel="canonical" href="{{ target | absolute_url }}">
+    <meta name="robots" content="noindex">
+    <title>最新简报</title>
+  </head>
+  <body>
+    <p>正在跳转到最新简报…… 如果没有自动跳转，请点击 <a href="{{ target }}">这里</a>。</p>
+    <script>
+      location.replace({{ target | jsonify }});
+    </script>
+  </body>
+</html>

@@ -30,12 +30,14 @@
         {%- comment -%}
           LOCAL OVERRIDE of Chirpy v7.6.0's _includes/sidebar.html.
 
-          Only this block differs from the theme's copy: the 简报 tab links
-          to the most recent brief entry instead of its own permalink
-          (/brief/), so the sidebar is always a jump to the latest digest.
-          The full list stays reachable from the link inside each brief.
+          Only this block differs from the theme's copy: the 简报 tab points
+          at /brief/latest/ (see brief-latest.html) instead of its own
+          permalink (/brief/), so the sidebar is always a jump to the newest
+          digest. Pointing at the stable redirect rather than resolving the
+          newest entry here means the sidebar and a saved bookmark share one
+          target.
 
-          `tab.url` is a static permalink, which is why redirecting has to
+          `tab.url` is a static permalink, which is why the redirect has to
           happen here rather than in _tabs/brief.md. Falls back to the tab's
           own url while _brief/ is still empty.
 
@@ -46,8 +48,7 @@
 
         {% if tab.url == '/brief/' %}
           {% if site.brief.size > 0 %}
-            {% assign latest_brief = site.brief | sort: 'date' | last %}
-            {% assign tab_url = latest_brief.url %}
+            {% assign tab_url = '/brief/latest/' %}
           {% endif %}
           <!-- highlight for the index and every entry under it -->
           {% if page.collection == 'brief' or page.url == '/brief/' %}

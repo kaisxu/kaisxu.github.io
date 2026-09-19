@@ -4,7 +4,17 @@
 
 本目录与 `_posts/` 完全独立：简报不属于 `site.posts`，因此不会出现在首页时间线、`/archives/`、`/categories/`、站内搜索和主 RSS 中。
 
-导航方式：左侧边栏的「简报」**始终指向最新一期**（由 `_includes/sidebar.html` 覆写实现），每篇简报底部有「查看全部简报」链接通往列表页 <https://kaisxu.github.io/brief/>。首页不设简报入口。
+导航方式：左侧边栏的「简报」**始终指向最新一期**，每篇简报底部有「查看全部简报」链接通往列表页 <https://kaisxu.github.io/brief/>。首页不设简报入口。
+
+固定书签地址：
+
+| URL | 指向 |
+|---|---|
+| `/brief/latest/` | **永远是最新一期**，适合存书签 |
+| `/brief/` | 全部条目列表（带标签筛选） |
+| `/brief/YYYY-MM-DD/` | 某一期的固定链接 |
+
+`/brief/latest/` 由根目录的 `brief-latest.html` 在**构建期**解析目标、客户端跳转实现（GitHub Pages 是纯静态，没有服务端 301）。每次新增简报触发重建时目标会自动更新，无需手工维护。
 
 ## 发布流程
 
