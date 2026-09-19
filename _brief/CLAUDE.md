@@ -2,7 +2,9 @@
 
 本目录存放每日简报条目，由生成程序自动写入。**每天一个文件**。
 
-本目录与 `_posts/` 完全独立：简报不属于 `site.posts`，因此不会出现在首页时间线、`/archives/`、`/categories/`、站内搜索和主 RSS 中。列表入口在 <https://kaisxu.github.io/brief/>。
+本目录与 `_posts/` 完全独立：简报不属于 `site.posts`，因此不会出现在首页时间线、`/archives/`、`/categories/`、站内搜索和主 RSS 中。
+
+导航方式：左侧边栏的「简报」**始终指向最新一期**（由 `_includes/sidebar.html` 覆写实现），每篇简报底部有「查看全部简报」链接通往列表页 <https://kaisxu.github.io/brief/>。首页不设简报入口。
 
 ## 发布流程
 

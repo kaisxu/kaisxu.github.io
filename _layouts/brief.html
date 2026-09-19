@@ -63,9 +63,16 @@ layout: default
       </div>
     {% endif %}
 
+    {%- comment -%}
+      With the home-page banner gone and the sidebar tab pointing at the
+      newest entry, this link is the only route to the full index — keep it
+      on every brief.
+    {%- endcomment -%}
+    {% assign brief_list = site.brief | sort: 'date' | reverse %}
     <div class="post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2">
       <a href="{{ '/brief/' | relative_url }}" class="no-text-decoration">
-        <i class="fas fa-angle-left fa-fw"></i> 返回简报列表
+        <i class="fas fa-list-ul fa-fw me-1"></i>查看全部简报
+        <span class="text-muted">（共 {{ brief_list.size }} 期）</span>
       </a>
     </div>
   </div>
