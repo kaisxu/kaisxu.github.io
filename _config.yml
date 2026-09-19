@@ -78,10 +78,23 @@ jekyll-archives:
 
 # Tabs collection — explicit so Chirpy's defaults are guaranteed to apply,
 # even if theme config merging loses the nested `defaults:` block.
+#
+# `brief` is the daily-digest collection. It is deliberately NOT `_posts/`:
+# Chirpy's `hidden: true` only removes a post from the home page, while
+# /archives/, /tags/, /categories/, search.json and feed.xml all still pick
+# it up (see their Liquid — only home.html tests `item.hidden`). A separate
+# collection is absent from `site.posts` entirely, so a daily cadence can't
+# swamp any of them.
 collections:
   tabs:
     output: true
     sort_by: order
+  brief:
+    output: true
+    # Collection permalinks support only :collection/:path/:name/:title/
+    # :output_ext — no :year/:month/:day. `:name` is the slugified filename,
+    # so _brief/2026-09-19.md → /brief/2026-09-19/.
+    permalink: /brief/:name/
 
 defaults:
   - scope:
@@ -90,6 +103,23 @@ defaults:
     values:
       layout: page
       permalink: /:title/
+  # Lets a generated entry carry only title/date/tags in its front matter.
+  - scope:
+      path: ""
+      type: brief
+    values:
+      layout: brief
+
+# Jekyll's built-in default is an EMPTY exclude list, and a theme gem's own
+# _config.yml is never read — so without this block every stray file in the
+# repo root is published (CLAUDE.md and README.md are currently live at
+# https://kaisxu.github.io/CLAUDE.md etc.). Listing them here also stops
+# _brief/CLAUDE.md, the authoring guide for the generator agent, from being
+# served or picked up as a brief entry.
+exclude:
+  - CLAUDE.md
+  - README.md
+  - _brief/CLAUDE.md
 
 # Override Chirpy's kramdown/syntax_highlighter_opts — newer kramdown accepts
 # the legacy `block:` / `span:` sub-keys (older Chirpy was wrong about that);
