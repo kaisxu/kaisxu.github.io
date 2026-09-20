@@ -67,9 +67,14 @@ order: 2
     {% endif %}
 
     {% capture tag_slugs %}{% for tag in entry.tags %}{{ tag | slugify }}{% unless forloop.last %}|{% endunless %}{% endfor %}{% endcapture %}
+    {%- comment -%}
+      No separate date column: the convention is for `title` to lead with the
+      date ("2026-09-20 简报"), so printing entry.date beside it rendered as
+      "09-20 2026-09-20 简报". The title (or, when one is missing, the date
+      that brief-title.html falls back to) already carries the date.
+    {%- endcomment -%}
     <li class="brief-entry mb-2" data-tags="{{ tag_slugs }}">
       <a href="{{ entry.url | relative_url }}">
-        <span class="text-muted">{{ entry.date | date: '%m-%d' }}</span>
         {% include brief-title.html entry=entry %}
       </a>
       {% if entry.tags.size > 0 %}
