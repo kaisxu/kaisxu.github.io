@@ -1,7 +1,13 @@
 {%- comment -%}
   Display title for one brief entry.
 
-  Usage: {% include brief-title.html entry=<a site.brief document> %}
+  Call it with an `entry` param set to a site.brief document.
+
+  NOTE: do not write a literal include tag in this comment as a usage
+  example. Liquid 4 still parses tags inside comment blocks, so a
+  placeholder like entry=<a document> is validated as real include params
+  and fails the build — with the error attributed to the *calling* file,
+  which makes it look like the caller is at fault.
 
   Renders `<title> (<期号>)`, where the 期号 is whatever follows the
   YYYY-MM-DD in the filename — `_brief/2026-09-20-2.md` shows as
