@@ -67,21 +67,10 @@ order: 2
     {% endif %}
 
     {% capture tag_slugs %}{% for tag in entry.tags %}{{ tag | slugify }}{% unless forloop.last %}|{% endunless %}{% endfor %}{% endcapture %}
-    {%- comment -%}
-      Resolve the title with if/else, not `default:`. Chaining
-      `entry.title | default: entry.date | date: '%Y-%m-%d'` would apply the
-      date filter to the *title* whenever one exists, and Ruby's Time.parse
-      is lenient enough to turn "2026-09-18 简报" into "2026-09-18".
-    {%- endcomment -%}
-    {% if entry.title %}
-      {% assign entry_title = entry.title %}
-    {% else %}
-      {% assign entry_title = entry.date | date: '%Y-%m-%d' %}
-    {% endif %}
     <li class="brief-entry mb-2" data-tags="{{ tag_slugs }}">
       <a href="{{ entry.url | relative_url }}">
         <span class="text-muted">{{ entry.date | date: '%m-%d' }}</span>
-        {{ entry_title }}
+        {% include brief-title.html entry=entry %}
       </a>
       {% if entry.tags.size > 0 %}
         <span class="brief-entry-tags text-muted small">

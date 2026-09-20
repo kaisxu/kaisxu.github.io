@@ -3,7 +3,8 @@ layout: default
 ---
 
 <!--
-  Layout for a single daily brief (_brief/*.md).
+  Layout for a single brief entry (_brief/*.md). More than one may share a
+  date; `_includes/brief-title.html` renders the 期号 that tells them apart.
 
   Deliberately lighter than `post.html`: no TOC, no related-posts, no
   post-nav, no share buttons, no license footer. A digest is a dated list of
@@ -21,20 +22,9 @@ layout: default
 
 {% include lang.html %}
 
-{%- comment -%}
-  if/else rather than `page.title | default: page.date | date: ...` — that
-  chain would feed an existing title through the date filter, and Ruby's
-  Time.parse would rewrite "2026-09-18 简报" to "2026-09-18".
-{%- endcomment -%}
-{% if page.title %}
-  {% assign brief_title = page.title %}
-{% else %}
-  {% assign brief_title = page.date | date: '%Y-%m-%d' %}
-{% endif %}
-
 <article class="px-1">
   <header>
-    <h1 data-toc-skip>{{ brief_title }}</h1>
+    <h1 data-toc-skip>{% include brief-title.html entry=page %}</h1>
 
     <div class="post-meta text-muted">
       <span>
@@ -64,16 +54,42 @@ layout: default
     {% endif %}
 
     {%- comment -%}
-      With the home-page banner gone and the sidebar tab pointing at the
-      newest entry, this link is the only route to the full index — keep it
-      on every brief.
+      Sibling navigation + the only route to the full index (the home page
+      has no brief banner and the sidebar tab jumps to the newest entry).
+
+      Ordering is by `date` alone, so two entries from the same day must
+      carry different times — see the warning in _brief/CLAUDE.md. The
+      strict `<` / `>` comparisons below are what enforce it: entries
+      sharing a timestamp match neither, and each would skip the other.
+
+      `flex-fill` on both outer spans keeps 查看全部简报 centred even when
+      one side is empty, which it always is on the newest and oldest entry.
     {%- endcomment -%}
     {% assign brief_list = site.brief | sort: 'date' | reverse %}
+    {% assign brief_prev = brief_list | where_exp: 'b', 'b.date < page.date' | first %}
+    {% assign brief_next = brief_list | where_exp: 'b', 'b.date > page.date' | last %}
+
     <div class="post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2">
-      <a href="{{ '/brief/' | relative_url }}" class="no-text-decoration">
+      <span class="flex-fill text-start">
+        {% if brief_prev %}
+          <a href="{{ brief_prev.url | relative_url }}" class="no-text-decoration">
+            <i class="fas fa-angle-left fa-fw me-1"></i>{% include brief-title.html entry=brief_prev %}
+          </a>
+        {% endif %}
+      </span>
+
+      <a href="{{ '/brief/' | relative_url }}" class="no-text-decoration px-3 text-nowrap">
         <i class="fas fa-list-ul fa-fw me-1"></i>查看全部简报
         <span class="text-muted">（共 {{ brief_list.size }} 期）</span>
       </a>
+
+      <span class="flex-fill text-end">
+        {% if brief_next %}
+          <a href="{{ brief_next.url | relative_url }}" class="no-text-decoration">
+            {% include brief-title.html entry=brief_next %}<i class="fas fa-angle-right fa-fw ms-1"></i>
+          </a>
+        {% endif %}
+      </span>
     </div>
   </div>
 </article>

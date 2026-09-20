@@ -1,0 +1,41 @@
+{%- comment -%}
+  Display title for one brief entry.
+
+  Usage: {% include brief-title.html entry=<a site.brief document> %}
+
+  Renders `<title> (<期号>)`, where the 期号 is whatever follows the
+  YYYY-MM-DD in the filename — `_brief/2026-09-20-2.md` shows as
+  "2026-09-20 简报 (2)". The day's first entry carries no suffix and so gets
+  no parentheses.
+
+  The suffix is read from the filename, not from front matter, so the
+  generator cannot publish a second entry and forget to mark it. It is split
+  off by counting dash-separated segments rather than by stripping the
+  front-matter date: the two disagree the moment a `date:` is edited without
+  renaming the file, and keying on the filename alone keeps the heading and
+  the URL telling the same story. Anything may follow the date — `-2` today,
+  a topic slug later — since only the position matters.
+
+  Title resolution is if/else rather than `entry.title | default: entry.date
+  | date: ...` — that chain would feed an existing title through the date
+  filter, and Ruby's Time.parse rewrites "2026-09-18 简报" to "2026-09-18".
+
+  Locals are `bt_`-prefixed because Liquid `assign` inside an include leaks
+  into the calling scope; the callers loop over `entry` and `b`.
+{%- endcomment -%}
+
+{%- assign bt_entry = include.entry -%}
+
+{%- if bt_entry.title -%}
+  {%- assign bt_title = bt_entry.title -%}
+{%- else -%}
+  {%- assign bt_title = bt_entry.date | date: '%Y-%m-%d' -%}
+{%- endif -%}
+
+{%- assign bt_parts = bt_entry.path | split: '/' | last | split: '.' | first | split: '-' -%}
+{%- if bt_parts.size > 3 -%}
+  {%- assign bt_seq = bt_parts | slice: 3, 64 | join: '-' -%}
+  {{- bt_title }} ({{ bt_seq }})
+{%- else -%}
+  {{- bt_title -}}
+{%- endif -%}
