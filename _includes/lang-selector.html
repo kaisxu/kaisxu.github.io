@@ -1,0 +1,52 @@
+{%- comment -%}
+  Language switcher for the sidebar.
+
+  Renders one link per configured language, pointing at the SAME page in that
+  language. `page.url` is always the un-prefixed url (polyglot writes the /en/
+  site by changing the destination directory, not the urls), so the target is
+  built by prepending the language segment for every non-default language.
+
+  Every href here is wrapped in a `static_href` block. Polyglot rewrites
+  relative hrefs in the rendered output to keep visitors inside the current
+  language — exactly the wrong thing for this control, which must be able to
+  point *out* of it. Without the wrapper, the "中文" link on an English page
+  would be rewritten to /en/... and the switcher could never switch.
+
+  NOTE: do not write that tag literally in this comment. Liquid 4 parses
+  tags inside comment blocks, so the opening tag would be matched against
+  `endcomment` and fail the build — with the error attributed to the file
+  that *includes* this one, which makes the caller look at fault. The same
+  hazard is documented in brief-title.html.
+
+  The current language renders as plain text rather than a link: polyglot's
+  fallback means the target would resolve either way, but a self-link in a
+  switcher reads as "not yet selected" and invites a pointless navigation.
+
+  Language names are written in their own language (中文, not "Chinese") —
+  someone who needs this control cannot necessarily read the current one.
+{%- endcomment -%}
+
+{%- assign current_lang = site.active_lang | default: site.default_lang -%}
+
+<div class="lang-selector d-flex flex-wrap align-items-center justify-content-center w-100">
+  {%- for lang in site.languages -%}
+    {%- if lang == site.default_lang -%}
+      {%- assign target = page.url -%}
+    {%- else -%}
+      {%- assign target = page.url | prepend: '/' | prepend: lang | prepend: '/' -%}
+    {%- endif -%}
+
+    {%- case lang -%}
+      {%- when 'zh-CN' -%}{%- assign label = '中文' -%}
+      {%- when 'en' -%}{%- assign label = 'English' -%}
+      {%- else -%}{%- assign label = lang -%}
+    {%- endcase -%}
+
+    {%- if lang == current_lang -%}
+      <span class="lang-item active" aria-current="true">{{ label }}</span>
+    {%- else -%}
+      <a class="lang-item" {% static_href %}href="{{ target | replace: '//', '/' }}"{% endstatic_href %}
+        hreflang="{{ lang }}" lang="{{ lang }}">{{ label }}</a>
+    {%- endif -%}
+  {%- endfor -%}
+</div>

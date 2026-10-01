@@ -1,0 +1,117 @@
+---
+layout: compress
+---
+
+{%- comment -%}
+  LOCAL OVERRIDE of Chirpy v7.6.0's _layouts/default.html.
+
+  Two changes from the theme's copy; everything else is verbatim.
+
+  1. `<html lang>` resolves through `lang.html` (the `lang` variable) instead
+     of reading `site.lang` directly. The theme's chain —
+     `page.lang | default: site.alt_lang | default: site.lang` — predates
+     polyglot and never consults `site.active_lang`, so every page of the
+     /en/ site declared `lang="zh-CN"`. That misinforms screen readers,
+     browser translation prompts, and search engines about the language of
+     the text they are looking at.
+
+     Note this deliberately reports the language of the *build*, not of the
+     text. A fallback page (untranslated, so showing Chinese under /en/) will
+     claim `lang="en"`. Both options are wrong for a fallback page; this one
+     is wrong in the direction that keeps a language's pages self-consistent,
+     and the canonical link already points such pages back at the original.
+
+  2. `include_cached` → `include` for the three chrome includes that take a
+     `lang=` parameter (update-list, trending-tags, footer, search-results,
+     notification, search-loader). Jekyll's include cache keys on the include
+     name and parameters, but these render `site.data.locales[lang]` lookups
+     whose results differ per language while the parameters stay textually
+     identical — the first language built would otherwise win and its strings
+     would leak into the other language's pages.
+
+  When bumping the chirpy gem, re-diff this file and re-apply.
+{%- endcomment -%}
+
+<!doctype html>
+
+{% include origin-type.html %}
+
+{% include lang.html %}
+
+<!-- `site.alt_lang` can specify a language different from the UI -->
+<html
+  lang="{{ page.lang | default: site.alt_lang | default: lang }}"
+  {% if site.theme_mode == 'light' or site.theme_mode == 'dark' -%}
+    data-bs-theme="{{ site.theme_mode }}"
+  {%- endif -%}
+>
+  {% include head.html lang=lang %}
+
+  <body>
+    {% include sidebar.html lang=lang %}
+
+    <div id="main-wrapper" class="d-flex justify-content-center">
+      <div class="container d-flex flex-column px-xxl-5">
+        {% include topbar.html lang=lang %}
+
+        <div class="row flex-grow-1">
+          <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            {% if layout.layout == 'default' %}
+              {% include refactor-content.html content=content lang=lang %}
+            {% else %}
+              {{ content }}
+            {% endif %}
+          </main>
+
+          <!-- panel -->
+          <aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 text-muted">
+            <div class="access">
+              {% include update-list.html lang=lang %}
+              {% include trending-tags.html lang=lang %}
+            </div>
+
+            {% for _include in layout.panel_includes %}
+              {% assign _include_path = _include | append: '.html' %}
+              {% include {{ _include_path }} lang=lang %}
+            {% endfor %}
+          </aside>
+        </div>
+
+        <div class="row">
+          <!-- tail -->
+          <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            {% for _include in layout.tail_includes %}
+              {% assign _include_path = _include | append: '.html' %}
+              {% include {{ _include_path }} lang=lang %}
+            {% endfor %}
+
+            {% include footer.html lang=lang %}
+          </div>
+        </div>
+
+        {% include search-results.html lang=lang %}
+      </div>
+
+      <aside aria-label="Scroll to Top">
+        <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow">
+          <i class="fas fa-angle-up"></i>
+        </button>
+      </aside>
+    </div>
+
+    <div id="mask" class="d-none position-fixed w-100 h-100 z-1"></div>
+
+    {% if site.pwa.enabled %}
+      {% include notification.html lang=lang %}
+    {% endif %}
+
+    <!-- Embedded scripts -->
+
+    {% for _include in layout.script_includes %}
+      {% assign _include_path = _include | append: '.html' %}
+      {% include {{ _include_path }} %}
+    {% endfor %}
+
+    {% include search-loader.html lang=lang %}
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!--
+  LOCAL OVERRIDE of Chirpy v7.6.0's _includes/search-loader.html.
+
+  Jekyll Simple Search loader
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+
+  Two changes from the theme's copy, both because the theme predates polyglot:
+
+  1. The index path is language-scoped. The theme hardcodes
+     `/assets/js/data/search.json`, so every page of the /en/ site would
+     search the Chinese index. Polyglot writes a separate index per language
+     under /<lang>/assets/..., so the prefix has to be added for any non-
+     default language.
+
+  2. Result urls are language-scoped the same way. The index stores
+     un-prefixed urls (polyglot localises the *destination*, not the urls),
+     so a hit found on the English site would otherwise navigate the reader
+     back out to the Chinese page. `static_href` keeps polyglot's own url
+     rewriting away from this template string — the `{url}` placeholder is
+     filled in by JavaScript at runtime, long after the Liquid pass, and
+     rewriting it here would produce a doubled prefix.
+
+  When bumping the chirpy gem, re-diff this file and re-apply.
+-->
+
+{%- assign search_index = '/assets/js/data/search.json' -%}
+{%- assign url_prefix = '' -%}
+{%- if site.active_lang and site.active_lang != site.default_lang -%}
+  {%- assign search_index = '/' | append: site.active_lang | append: search_index -%}
+  {%- assign url_prefix = '/' | append: site.active_lang -%}
+{%- endif -%}
+
+{% capture result_elem %}
+  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">
+    <header>
+      <h2><a {% static_href %}href="{{ url_prefix }}{url}"{% endstatic_href %}>{title}</a></h2>
+      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">
+        {categories}
+        {tags}
+      </div>
+    </header>
+    <p>{content}</p>
+  </article>
+{% endcapture %}
+
+{% capture not_found %}<p class="mt-5">{{ site.data.locales[include.lang].search.no_results }}</p>{% endcapture %}
+
+<script>
+  {% comment %} Note: dependent library will be loaded in `js-selector.html` {% endcomment %}
+  document.addEventListener('DOMContentLoaded', () => {
+    SimpleJekyllSearch({
+      searchInput: document.getElementById('search-input'),
+      resultsContainer: document.getElementById('search-results'),
+      json: '{{ search_index | relative_url }}',
+      searchResultTemplate: '{{ result_elem | strip_newlines }}',
+      noResultsText: '{{ not_found }}',
+      templateMiddleware: function(prop, value, template) {
+        if (prop === 'categories') {
+          if (value === '') {
+            return `${value}`;
+          } else {
+            return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+          }
+        }
+
+        if (prop === 'tags') {
+          if (value === '') {
+            return `${value}`;
+          } else {
+            return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+          }
+        }
+      }
+    });
+  });
+</script>

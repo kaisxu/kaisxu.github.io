@@ -1,0 +1,33 @@
+{%- comment -%}
+  LOCAL OVERRIDE of Chirpy v7.6.0's _includes/lang.html.
+
+  Detect the UI language and return it as `lang`.
+
+  The theme's copy checks `page.lang` then `site.lang`. It predates polyglot
+  and so never looks at `site.active_lang`, which is the language the current
+  build is actually for. Without the extra branch below, every page of the
+  /en/ site would render its chrome (sidebar labels, date formats, "Posted
+  by", the copy-code tooltip) in Chinese, because `site.lang` is zh-CN.
+
+  Order matters. `page.lang` comes first so a single document can opt out of
+  its build's language; `site.active_lang` then covers the normal case.
+  `site.lang` remains as the final fallback for builds where polyglot is not
+  active (it leaves `active_lang` unset), so this file degrades to the
+  theme's behaviour rather than breaking if the plugin is ever removed.
+
+  Each candidate is tested against `site.data.locales` rather than used
+  directly: an unknown code would otherwise yield `lang` pointing at a
+  missing locale file, and every chrome string on the page would render
+  empty. Chirpy ships zh-CN.yml and en.yml, so both of our languages resolve.
+
+  When bumping the chirpy gem, re-diff this file and re-apply.
+{%- endcomment -%}
+{% if site.data.locales[page.lang] %}
+  {% assign lang = page.lang %}
+{% elsif site.data.locales[site.active_lang] %}
+  {% assign lang = site.active_lang %}
+{% elsif site.data.locales[site.lang] %}
+  {% assign lang = site.lang %}
+{% else %}
+  {% assign lang = 'en' %}
+{% endif %}

@@ -26,14 +26,30 @@ sitemap: false
   No `layout:` key, so Jekyll renders this file as-is.
 {%- endcomment -%}
 
+{%- comment -%}
+  Polyglot rewrites `href="…"` in rendered output to keep visitors inside the
+  current language, but it does not touch a `<meta http-equiv="refresh">` url
+  or a JS string. Left alone, the /en/ copy of this page disagreed with
+  itself: the visible link pointed at /en/brief/…, while the meta refresh and
+  location.replace — the two paths that actually fire — sent the reader to
+  /brief/…, dropping them out of the English site.
+
+  So the language prefix is applied here, once, and every outlet below uses
+  the same `target`. The visible link is wrapped in static_href to stop
+  polyglot prefixing an already-prefixed url.
+{%- endcomment -%}
 {%- assign latest_brief = site.brief | sort: 'date' | last -%}
 {%- if latest_brief -%}
-  {%- assign target = latest_brief.url | relative_url -%}
+  {%- assign target = latest_brief.url -%}
 {%- else -%}
-  {%- assign target = '/brief/' | relative_url -%}
+  {%- assign target = '/brief/' -%}
 {%- endif -%}
+{%- if site.active_lang and site.active_lang != site.default_lang -%}
+  {%- assign target = target | prepend: '/' | prepend: site.active_lang | prepend: '/' -%}
+{%- endif -%}
+{%- assign target = target | replace: '//', '/' | relative_url -%}
 <!doctype html>
-<html lang="{{ site.lang | default: 'en' }}">
+<html lang="{{ site.active_lang | default: site.lang | default: 'en' }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="refresh" content="0; url={{ target }}">
@@ -42,7 +58,7 @@ sitemap: false
     <title>最新简报</title>
   </head>
   <body>
-    <p>正在跳转到最新简报…… 如果没有自动跳转，请点击 <a href="{{ target }}">这里</a>。</p>
+    <p>正在跳转到最新简报…… 如果没有自动跳转，请点击 <a {% static_href %}href="{{ target }}"{% endstatic_href %}>这里</a>。</p>
     <script>
       location.replace({{ target | jsonify }});
     </script>

@@ -1,0 +1,67 @@
+---
+permalink: /sitemap.xml
+lang-exclusive: ["zh-CN"]
+---
+{%- comment -%}
+  Site-wide sitemap, replacing the one jekyll-sitemap generates.
+
+  Two problems with the generated one under polyglot:
+
+   1. It ran once per language, and because polyglot localises the build
+      *destination* rather than the urls, /en/sitemap.xml came out byte-
+      identical to the root one — a second sitemap advertising the Chinese
+      urls as if they were English. jekyll-sitemap has no per-language
+      awareness and no opt-out switch; it simply skips generating when the
+      source tree already provides a sitemap.xml, which is what this file is.
+
+   2. It emitted no hreflang alternates, so the two language versions of a
+      page were never declared as alternates of each other.
+
+  `lang-exclusive: ["zh-CN"]` is polyglot's own mechanism and is the right
+  tool here: it builds this file for the default language only, so exactly
+  one sitemap.xml exists, at the root, as the sitemap protocol requires (a
+  sitemap may only list urls at or below its own directory — a copy under
+  /en/ could not legally list root urls anyway).
+
+  Every url is emitted once, with an <xhtml:link> alternate per language.
+  Urls are written absolute and built by hand rather than via `absolute_url`,
+  because polyglot's url relativizing only rewrites `href=` attributes and
+  would leave these untouched regardless.
+{%- endcomment -%}
+{%- assign pages = site.pages | where_exp: 'p', 'p.sitemap != false' -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+{%- assign all_docs = site.posts | concat: site.brief | concat: site.tabs -%}
+{%- for doc in all_docs %}
+  <url>
+    <loc>{{ doc.url | absolute_url | xml_escape }}</loc>
+    {%- if doc.last_modified_at or doc.date %}
+    <lastmod>{{ doc.last_modified_at | default: doc.date | date_to_xmlschema }}</lastmod>
+    {%- endif %}
+    {%- for lang in site.languages %}
+      {%- if lang == site.default_lang -%}
+        {%- assign alt = doc.url -%}
+      {%- else -%}
+        {%- assign alt = doc.url | prepend: '/' | prepend: lang | prepend: '/' | replace: '//', '/' -%}
+      {%- endif %}
+    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ alt | absolute_url | xml_escape }}" />
+    {%- endfor %}
+  </url>
+{%- endfor %}
+{%- for page in pages -%}
+  {%- unless page.url contains '.xml' or page.url contains '.txt' or page.url contains '.json' or page.url == '/404.html' %}
+  <url>
+    <loc>{{ page.url | absolute_url | xml_escape }}</loc>
+    {%- for lang in site.languages %}
+      {%- if lang == site.default_lang -%}
+        {%- assign alt = page.url -%}
+      {%- else -%}
+        {%- assign alt = page.url | prepend: '/' | prepend: lang | prepend: '/' | replace: '//', '/' -%}
+      {%- endif %}
+    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ alt | absolute_url | xml_escape }}" />
+    {%- endfor %}
+  </url>
+  {%- endunless -%}
+{%- endfor %}
+</urlset>

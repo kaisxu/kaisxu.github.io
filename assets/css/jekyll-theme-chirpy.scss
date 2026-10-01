@@ -1,0 +1,58 @@
+---
+---
+
+/*
+  LOCAL OVERRIDE of Chirpy v7.6.0's assets/css/jekyll-theme-chirpy.scss.
+
+  The theme ships this file as the stylesheet entry point, ending with an
+  "append your custom style below" comment. A gem-installed theme's copy
+  cannot be edited, so the file is recreated here verbatim and extended.
+  The two @use rules must stay byte-identical to the theme's — they are what
+  pull in the actual Chirpy styles.
+
+  When bumping the chirpy gem, re-diff this file and re-apply.
+*/
+
+@use 'abstracts/variables' with (
+  $theme: '{{ site.theme_mode }}'
+);
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+
+/*
+  Language switcher (_includes/lang-selector.html).
+
+  Styled to sit quietly above the icon row: same muted palette as the rest of
+  sidebar-bottom, so it reads as chrome rather than as a call to action. The
+  active language is heavier and takes the normal text colour; the others are
+  muted until hovered.
+*/
+.lang-selector {
+  gap: 0.75rem;
+  padding: 0.5rem 0 0.25rem;
+  font-size: 0.8rem;
+  line-height: 1;
+
+  .lang-item {
+    color: var(--sidebar-muted-color);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      color: var(--sidebar-active-color);
+    }
+
+    &.active {
+      color: var(--sidebar-active-color);
+      font-weight: 600;
+      cursor: default;
+    }
+  }
+}

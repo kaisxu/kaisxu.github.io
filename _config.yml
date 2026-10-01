@@ -8,8 +8,47 @@
 theme: jekyll-theme-chirpy
 
 # Locale / timezone
-lang: en
+#
+# `lang` is the fallback Chirpy uses to pick _data/locales/<lang>.yml. The
+# language actually driving a build is `site.active_lang` — see the local
+# override in _includes/lang.html, which prefers it over this key.
+lang: zh-CN
 timezone: Asia/Shanghai
+
+# ---------------------------------------------------------------------------
+# Polyglot (multilingual) — see AGENTS.md § 多语言
+#
+# Chinese is the default language and therefore carries NO url prefix: every
+# pre-existing post keeps the exact url it had before polyglot was added.
+# English is served under /en/.
+#
+# A document that exists in only one language still resolves in the other:
+# polyglot falls back to `default_lang` content rather than 404ing. That is
+# what makes a translation optional and after-the-fact — publishing never
+# blocks on it.
+# ---------------------------------------------------------------------------
+languages: ["zh-CN", "en"]
+default_lang: "zh-CN"
+
+# Derive a document's language from its directory (_posts/en/… → en) so no
+# document has to carry a `lang:` key. Jekyll ignores subdirectories under
+# _posts when building urls, so this adds language separation for free.
+lang_from_path: true
+
+# Keep one sitemap.xml at the root — the sitemap protocol scopes a sitemap to
+# its own directory, so a copy under /en/ could not list root urls. `assets`
+# is shared verbatim across languages.
+exclude_from_localization: ["assets", "sitemap.xml"]
+
+# Serial builds. Polyglot's parallel mode forks one process per language and
+# has a long-standing race where a page can render under the wrong language
+# (untra/polyglot#190, still open). With two languages and ~25 documents the
+# parallel win is irrelevant, so take the safe path.
+parallel_localization: false
+
+# Point a fallback page's canonical at the default-language url, so search
+# engines don't index untranslated Chinese content twice under /en/.
+fallback_canonical_to_default_lang: true
 
 # Site identity
 title: Sam (kaisxu)
@@ -64,6 +103,18 @@ plugins:
   - jekyll-sitemap
   - jekyll-paginate
   - jekyll-archives
+  - jekyll-polyglot
+
+# `whitelist` only takes effect in safe mode, which the Actions build does not
+# use. Listed anyway so the plugin set stays declared in one place.
+whitelist:
+  - jekyll-polyglot
+
+# Jekyll 4 + polyglot generate SCSS source maps incorrectly (polyglot runs the
+# Sass build once per language against a shared destination). Documented in
+# polyglot's README under Compatibility.
+sass:
+  sourcemap: never
 
 # jekyll-archives config — mirrors Chirpy defaults, kept here so the
 # legacy build (if anyone re-enables it) and the Actions build agree.
@@ -93,7 +144,12 @@ collections:
     output: true
     # Collection permalinks support only :collection/:path/:name/:title/
     # :output_ext — no :year/:month/:day. `:name` is the slugified filename,
-    # so _brief/2026-09-19.md → /brief/2026-09-19/.
+    # so _brief/zh-CN/2026-09-19.md → /brief/2026-09-19/.
+    #
+    # `:name` ignores the directory, which is exactly why the per-language
+    # subdirectory costs nothing here: the zh-CN and en copies of an entry
+    # produce the same permalink, and that is how polyglot pairs them as
+    # translations of each other.
     permalink: /brief/:name/
 
 defaults:
@@ -110,16 +166,62 @@ defaults:
     values:
       layout: brief
 
+  # --- Translation bookkeeping -------------------------------------------
+  #
+  # `translate` is read ONLY by tools/i18n-status.py; Jekyll and polyglot
+  # ignore it. It never changes what gets built: an untranslated document
+  # still resolves in the other language via polyglot's fallback. It only
+  # answers "should the script nag me about this one?".
+  #
+  # Do not confuse it with polyglot's own `lang-exclusive:`, which actually
+  # removes a document from a language build and makes that url 404. Nothing
+  # here uses lang-exclusive.
+  #
+  # Defaults say: translate every post, and every brief too (briefs are opt-in
+  # noise in the report — the script hides them unless given --all).
+  - scope:
+      path: _posts
+    values:
+      translate: true
+  - scope:
+      path: _brief
+    values:
+      translate: true
+
+  # A Chinese translation of an English original. Re-translating it back into
+  # English would manufacture a degraded copy of someone else's article, so it
+  # is the source for zh-CN only. The post's own header already links readers
+  # to the English original, which is where an English-speaking visitor should
+  # end up anyway.
+  - scope:
+      path: _posts/zh-CN/2026-07-07-what-happens-when-you-run-a-gpu-kernel.md
+    values:
+      translate: false
+
 # Jekyll's built-in default is an EMPTY exclude list, and a theme gem's own
 # _config.yml is never read — so without this block every stray file in the
 # repo root is published (CLAUDE.md and README.md are currently live at
 # https://kaisxu.github.io/CLAUDE.md etc.). Listing them here also stops
-# _brief/CLAUDE.md, the authoring guide for the generator agent, from being
+# _brief/AGENTS.md, the authoring guide for the generator agent, from being
 # served or picked up as a brief entry.
+#
+# CLAUDE.md is a symlink to AGENTS.md; both names are excluded so neither
+# path is served. `_brief/MEMORY.md` is the journal-watch agent's state file
+# — gitignored, so it never reaches the deployed build from CI, but it is
+# present in a local working tree and would otherwise be copied into _site
+# (and, once the collection gained a language directory, into /en/ as well).
+#
+# Keep these literal — polyglot builds a regex out of this list, and an
+# unescaped glob like "*.md" used to blow up the build (untra/polyglot#204,
+# fixed in 1.11.0, but literals avoid the class of bug entirely).
 exclude:
+  - AGENTS.md
   - CLAUDE.md
   - README.md
+  - _brief/AGENTS.md
   - _brief/CLAUDE.md
+  - _brief/MEMORY.md
+  - tools
 
 # Override Chirpy's kramdown/syntax_highlighter_opts — newer kramdown accepts
 # the legacy `block:` / `span:` sub-keys (older Chirpy was wrong about that);

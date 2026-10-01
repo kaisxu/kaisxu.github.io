@@ -1,2 +1,14 @@
 MEMORY.md
 .claude/
+
+# Jekyll build output and local gem installs.
+# Gemfile.lock stays untracked deliberately: the Actions workflow resolves
+# dependencies itself (`bundler-cache: true`) under Ruby 3.2, and a lockfile
+# generated locally under a different Ruby would pin platform-specific gems
+# that the runner then has to re-resolve anyway.
+_site/
+.bundle/
+.bundle-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock

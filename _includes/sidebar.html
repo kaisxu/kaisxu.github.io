@@ -71,6 +71,15 @@
     </ul>
   </nav>
 
+  <!--
+    Language switcher. Sits between the tabs and the icon row so it reads as
+    a property of the whole site rather than one more destination in the nav.
+    Second local addition to this file — see the note in the tab loop above.
+  -->
+  <div class="lang-selector-wrapper w-100">
+    {%- include lang-selector.html -%}
+  </div>
+
   <div class="sidebar-bottom d-flex flex-wrap align-items-center w-100">
     {% unless site.theme_mode == 'light' or site.theme_mode == 'dark' %}
       {%- capture icon_system -%}
