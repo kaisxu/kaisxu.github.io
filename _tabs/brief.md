@@ -6,7 +6,7 @@ order: 2
 ---
 
 <!--
-  Index for the `brief` collection (_brief/*.md).
+  Index for the `brief` collection (_brief/<lang>/*.md).
 
   Tag filtering is client-side on purpose. jekyll-archives only ever walks
   `site.posts`, so it builds no /tags/ page for a brief-only tag; generating
@@ -22,7 +22,7 @@ order: 2
 
 {% if briefs.size == 0 %}
 
-还没有简报条目。生成器往 `_brief/` 放入第一个文件后，这里就会自动出现。
+还没有简报条目。生成器往 `_brief/zh-CN/` 放入第一个文件后，这里就会自动出现。
 
 {% else %}
 

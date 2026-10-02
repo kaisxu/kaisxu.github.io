@@ -3,8 +3,9 @@ layout: default
 ---
 
 <!--
-  Layout for a single brief entry (_brief/*.md). More than one may share a
-  date; `_includes/brief-title.html` renders the 期号 that tells them apart.
+  Layout for a single brief entry (_brief/<lang>/*.md). More than one may
+  share a date; `_includes/brief-title.html` renders the 期号 that tells them
+  apart.
 
   Deliberately lighter than `post.html`: no TOC, no related-posts, no
   post-nav, no share buttons, no license footer. A digest is a dated list of
@@ -58,7 +59,7 @@ layout: default
       has no brief banner and the sidebar tab jumps to the newest entry).
 
       Ordering is by `date` alone, so two entries from the same day must
-      carry different times — see the warning in _brief/CLAUDE.md. The
+      carry different times — see the warning in _brief/AGENTS.md. The
       strict `<` / `>` comparisons below are what enforce it: entries
       sharing a timestamp match neither, and each would skip the other.
 

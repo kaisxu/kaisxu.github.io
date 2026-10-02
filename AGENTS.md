@@ -22,7 +22,7 @@ Gemfile              # bundle install — pins jekyll + Chirpy runtime gems
 .github/workflows/   # Jekyll build & deploy workflow
 index.html           # homepage — `layout: home`, picks up posts via Chirpy
 _posts/<lang>/       # blog posts, one directory per language
-_brief/<lang>/       # daily digest entries, one directory per language
+_brief/<lang>/       # daily digest entries — see _brief/AGENTS.md before writing one
 _includes/           # local overrides of Chirpy includes — see each file's header
 tools/               # repo scripts (not published; excluded in _config.yml)
 README.md            # one-line project description

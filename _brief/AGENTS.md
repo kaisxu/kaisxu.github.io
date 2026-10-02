@@ -102,8 +102,22 @@ tags: [AI, 芯片, 网络]
 - 摘要用 Markdown 即可，标准语法都支持。
 - 每条目建议用 `## [标题](URL)` 形式，便于扫读。
 - **务必保留来源链接**——简报的价值在于可追溯。
-- 数学公式、Mermaid 图表在简报里**不可用**（`layout: brief` 未加载对应运行时）。需要这些请写成正式文章放 `_posts/`。
+- 数学公式、Mermaid 图表在简报里**不可用**（`layout: brief` 未加载对应运行时）。需要这些请写成正式文章放 `_posts/zh-CN/`。
 
 ## 本目录的文件
 
-`CLAUDE.md`（本文件）已在 `_config.yml` 的 `exclude` 中列出，不会被发布，也不会被当作简报条目。**除此之外，本目录内的所有 `.md` 文件都会成为线上页面**——草稿、临时文件请勿留在这里。
+```
+_brief/
+├── AGENTS.md      ← 本文件（CLAUDE.md 是指向它的软链接）
+├── MEMORY.md      ← journal-watch 的状态，gitignored
+└── zh-CN/         ← 简报条目写在这里
+    └── YYYY-MM-DD.md
+```
+
+`AGENTS.md`、`CLAUDE.md`、`MEMORY.md` 都已在 `_config.yml` 的 `exclude` 中列出，不会被发布。
+
+**`zh-CN/` 里的所有 `.md` 文件都会成为线上页面**——草稿、临时文件请勿留在这里。
+
+> **条目要写进 `zh-CN/`，不要放在 `_brief/` 根目录。**
+> 放在根目录的条目**依然能正常发布**（Jekyll 收集整个 collection，URL 也不变），所以不会报错，只是语言归属丢失，需要事后挪一次。2026-10-02 那期就是这样被补救的。
+{: .prompt-warning }
