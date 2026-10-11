@@ -63,7 +63,7 @@ categories: [tech, topic]
 ---
 ```
 
-- Date must be in the past or present — Jekyll/the site may drop future-dated posts.
+- Date may be in the future — `_config.yml` sets `future: true`, so a slightly-ahead timestamp still publishes. (Before it was enabled, Jekyll dropped such documents silently: green build, 404 page.)
 - `+0800` timezone is the convention used across existing posts.
 - **Use YAML list form for categories** (`[tech, gpu]`) — Chirpy treats this as hierarchical and generates `/categories/tech/gpu/` archive pages. The legacy space-separated form (`tech gpu`) would be parsed as a single category "tech gpu".
 
@@ -168,7 +168,9 @@ Easiest way to get the real URL after a deploy:
 curl -s https://kaisxu.github.io/sitemap.xml | grep -o '<loc>[^<]*</loc>'
 ```
 
-Always fetch the rendered URL — the workflow succeeding does not guarantee the post is publicly visible. In particular, a **future-dated post builds green but 404s**, because Jekyll drops it (no `future: true` in `_config.yml`). Check `date` against the current clock, not just the filename.
+Always fetch the rendered URL — the workflow succeeding does not guarantee the post is publicly visible. Note that `sitemap.xml` and collection list pages are built by iterating the collection, so an entry can appear there while its page was never emitted: a link existing does not prove its target does. Check the live url, or the build log for the emitted `index.html`.
+
+(Historically the usual cause was a **future-dated post building green but 404ing**, because Jekyll dropped it. `_config.yml` now sets `future: true`, so that specific failure is gone.)
 
 ## 多语言
 

@@ -15,6 +15,24 @@ theme: jekyll-theme-chirpy
 lang: zh-CN
 timezone: Asia/Shanghai
 
+# Publish documents whose `date` is in the future.
+#
+# Jekyll's publisher applies to every document carrying a `date`, not just
+# posts, and with the default `future: false` it drops them SILENTLY — the
+# build still reports success, the url just 404s. Worse, the entry still
+# appears in sitemap.xml and on /brief/, because those templates iterate the
+# collection at build time; a link existing does not mean its target does.
+#
+# A brief written at 07:00 +0800 is 23:00Z, and the build that publishes it
+# starts seconds later — so a timestamp rounded even slightly forward lands
+# in the future and the entry vanishes. That produced seven "Fix brief date
+# to be in the past" commits before this was turned on.
+#
+# Nothing here relies on date-gating to embargo content: entries are written
+# and pushed the moment they're ready. Turning this on therefore costs no
+# scheduling behaviour and removes an entire class of silent failure.
+future: true
+
 # ---------------------------------------------------------------------------
 # Polyglot (multilingual) — see AGENTS.md § 多语言
 #
